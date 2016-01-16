@@ -50,6 +50,7 @@ import org.moeaframework.core.indicator.R1Indicator;
 import org.moeaframework.core.indicator.R2Indicator;
 import org.moeaframework.core.indicator.R3Indicator;
 import org.moeaframework.core.indicator.Spacing;
+import org.moeaframework.core.indicator.GeneralizedSpread;
 import org.moeaframework.core.spi.ProblemFactory;
 
 /**
@@ -103,6 +104,12 @@ public class Instrumenter extends ProblemBuilder {
 	 */
 	private boolean includeSpacing;
 	
+	/**
+	 * {@code true} if the Generalized Spread collector is included; {@code false}
+	 * otherwise.
+	 */
+	private boolean includeGeneralizedSpread;
+
 	/**
 	 * {@code true} if the additive &epsilon;-indicator collector is included;
 	 * {@code false} otherwise.
@@ -317,6 +324,17 @@ public class Instrumenter extends ProblemBuilder {
 	}
 	
 	/**
+	 * Includes the spacing collector when instrumenting algorithms.
+	 *
+	 * @return a reference to this instrumenter
+	 */
+	public Instrumenter attachGeneralizedSpreadCollector() {
+		includeGeneralizedSpread = true;
+
+		return this;
+	}
+
+	/**
 	 * Includes the additive &epsilon;-indicator collector when instrumenting
 	 * algorithms.
 	 * 
@@ -385,6 +403,7 @@ public class Instrumenter extends ProblemBuilder {
 		attachGenerationalDistanceCollector();
 		attachInvertedGenerationalDistanceCollector();
 		attachSpacingCollector();
+		attachGeneralizedSpreadCollector();
 		attachAdditiveEpsilonIndicatorCollector();
 		attachContributionCollector();
 		attachR1Collector();
@@ -656,7 +675,7 @@ public class Instrumenter extends ProblemBuilder {
 		if (includeHypervolume || includeGenerationalDistance || 
 				includeInvertedGenerationalDistance || includeSpacing ||
 				includeAdditiveEpsilonIndicator || includeContribution ||
-				includeR1 || includeR2 || includeR3) {
+				includeR1 || includeR2 || includeR3 || includeGeneralizedSpread) {
 			Problem problem = algorithm.getProblem();
 			NondominatedPopulation referenceSet = getReferenceSet();
 			EpsilonBoxDominanceArchive archive = null;
@@ -687,6 +706,11 @@ public class Instrumenter extends ProblemBuilder {
 						archive));
 			}
 			
+			if (includeGeneralizedSpread) {
+				collectors.add(new IndicatorCollector(
+						new GeneralizedSpread(problem,referenceSet), archive));
+			}
+
 			if (includeAdditiveEpsilonIndicator) {
 				collectors.add(new IndicatorCollector(
 						new AdditiveEpsilonIndicator(problem, referenceSet),

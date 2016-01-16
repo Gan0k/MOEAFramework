@@ -95,6 +95,12 @@ public class QualityIndicator {
 	private double spacing;
 
 	/**
+	 * The Generalized Spread of the approximation set from the last invocation of
+	 * {@code calculate}.
+	 */
+	private double generalizedSpread;
+
+	/**
 	 * Constructs a quality indicator evaluator for the specified problem and 
 	 * corresponding reference set.
 	 * 
@@ -213,6 +219,21 @@ public class QualityIndicator {
 	}
 
 	/**
+	 * Returns the Generalized Spread of the approximation set from the last
+	 * invocation of {@code calculate}.
+	 *
+	 * @return the Generalized Spread of the approximation set from the last
+	 *         invocation of {@code calculate}
+	 * @throws IllegalStateException if the {@code calculate} method has not
+	 *         been invoked
+	 */
+	public double getGeneralizedSpread() {
+		checkCalculateInvocation();
+
+		return generalizedSpread;
+	}
+
+	/**
 	 * The reference set for the problem.
 	 * 
 	 * @return the reference set for the problem
@@ -265,6 +286,8 @@ public class QualityIndicator {
 		maximumParetoFrontError = MaximumParetoFrontError.evaluate(problem,
 				normalizedApproximationSet, normalizedReferenceSet);
 		spacing = Spacing.evaluate(problem, approximationSet);
+		generalizedSpread = GeneralizedSpread.evaluate(problem,
+				normalizedApproximationSet, normalizedReferenceSet);
 	}
 
 }

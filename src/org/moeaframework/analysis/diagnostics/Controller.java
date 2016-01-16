@@ -104,6 +104,12 @@ public class Controller {
 	private boolean includeSpacing = true;
 	
 	/**
+	 * {@code true} if the generalized spread indicator collector is included;
+	 * {@code false} otherwise.
+	 */
+	private boolean includeGeneralizedSpread = true;
+
+	/**
 	 * {@code true} if the additive &epsilon;-indicator collector is
 	 * included; {@code false} otherwise.
 	 */
@@ -493,6 +499,10 @@ public class Controller {
 				analyzer.includeSpacing();
 			}
 			
+			if (getIncludeGeneralizedSpread()) {
+				analyzer.includeGeneralizedSpread();
+			}
+
 			if (getIncludeAdditiveEpsilonIndicator()) {
 				analyzer.includeAdditiveEpsilonIndicator();
 			}
@@ -588,6 +598,10 @@ public class Controller {
 						instrumenter.attachSpacingCollector();
 					}
 					
+					if (getIncludeGeneralizedSpread()) {
+						instrumenter.attachGeneralizedSpreadCollector();
+					}
+
 					if (getIncludeAdditiveEpsilonIndicator()) {
 						instrumenter.attachAdditiveEpsilonIndicatorCollector();
 					}
@@ -817,6 +831,18 @@ public class Controller {
 	}
 
 	/**
+	 * Returns {@code true} if the generalized spread indicator collector
+	 * is included; {@code false} otherwise.
+	 *
+	 * @return {@code true} if the generalized spread indicator collector
+	 * 						is included;
+	 *         {@code false} otherwise
+	 */
+	public boolean getIncludeGeneralizedSpread() {
+		return includeGeneralizedSpread;
+	}
+
+	/**
 	 * Sets the inclusion of the spacing indicator collector.
 	 * 
 	 * @param includeSpacing {@code true} if the spacing indicator collector is
@@ -824,6 +850,16 @@ public class Controller {
 	 */
 	public void setIncludeSpacing(boolean includeSpacing) {
 		this.includeSpacing = includeSpacing;
+	}
+
+	/**
+	 * Sets the inclusion of the generalized spread indicator collector.
+	 *
+	 * @param includeGeneralizedSpread {@code true} if the spacing indicator
+	 *        collector is included; {@code false} otherwise
+	 */
+	public void setIncludeGeneraizedSpread(boolean includeGeneralizedSpread) {
+		this.includeGeneralizedSpread = includeGeneralizedSpread;
 	}
 
 	/**

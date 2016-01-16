@@ -77,6 +77,11 @@ public class QualityIndicatorTest {
 		qualityIndicator.getSpacing();
 	}
 	
+	@Test(expected = IllegalStateException.class)
+	public void testGeneralizedSpreadIllegalState() {
+		qualityIndicator.getGeneralizedSpread();
+	}
+
 	@Test
 	public void testValidState() {
 		qualityIndicator.calculate(qualityIndicator.getReferenceSet());
@@ -86,6 +91,7 @@ public class QualityIndicatorTest {
 		qualityIndicator.getInvertedGenerationalDistance();
 		qualityIndicator.getMaximumParetoFrontError();
 		qualityIndicator.getSpacing();
+		qualityIndicator.getGeneralizedSpread();
 	}
 
 }

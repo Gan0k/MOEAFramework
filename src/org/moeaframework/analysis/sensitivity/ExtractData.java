@@ -41,6 +41,7 @@ import org.moeaframework.core.indicator.R1Indicator;
 import org.moeaframework.core.indicator.R2Indicator;
 import org.moeaframework.core.indicator.R3Indicator;
 import org.moeaframework.core.indicator.Spacing;
+import org.moeaframework.core.indicator.GeneralizedSpread;
 import org.moeaframework.core.spi.ProblemFactory;
 import org.moeaframework.util.CommandLineUtility;
 import org.moeaframework.util.OptionCompleter;
@@ -58,6 +59,7 @@ import org.moeaframework.util.TypedProperties;
  *   <li>{@code +epsilon} for {@link AdditiveEpsilonIndicator}
  *   <li>{@code +error} for {@link MaximumParetoFrontError}
  *   <li>{@code +spacing} for {@link Spacing}
+ *   <li>{@code +gspread} for {@link GeneralizedSpread}
  *   <li>{@code +contribution} for {@link Contribution}
  *   <li>{@code +R1} for {@link R1Indicator}
  *   <li>{@code +R2} for {@link R2Indicator}
@@ -324,6 +326,8 @@ public class ExtractData extends CommandLineUtility {
 			indicator = new MaximumParetoFrontError(problem, referenceSet);
 		} else if (option.equals("spacing")) {
 			indicator = new Spacing(problem);
+		} else if (option.equals("spread")) {
+			indicator = new GeneralizedSpread(problem,referenceSet);
 		} else if (option.equals("contribution")) {
 			if (commandLine.hasOption("epsilon")) {
 				double[] epsilon = TypedProperties.withProperty("epsilon",

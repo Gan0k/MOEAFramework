@@ -107,4 +107,29 @@ public class IndicatorUtils {
 		return minimum;
 	}
 
+	/**
+	 * Returns the Euclidean distance in objective space between the specified
+	 * solution and the nearest solution in the population. Since the solution
+	 * belongs to the population, we have to avoid to measure it against
+	 * itself.
+	 *
+	 * @param problem the problem
+	 * @param idx index of the solution in the population
+	 * @param population the population
+	 * @return the Euclidean distance in objective space between the specified
+	 *         solution and the nearest solution in the population
+	 */
+	public static double distanceToNearestNeighbour(Problem problem,
+			int idx, NondominatedPopulation population) {
+		double minimum = Double.POSITIVE_INFINITY;
+
+		for (int i = 0; i < population.size(); i++) {
+			if (idx != i) {
+				minimum = Math.min(minimum, euclideanDistance(problem,
+					population.get(idx), population.get(i)));
+			}
+		}
+
+		return minimum;
+	}
 }

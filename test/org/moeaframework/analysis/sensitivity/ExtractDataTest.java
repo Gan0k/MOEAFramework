@@ -121,7 +121,7 @@ public class ExtractDataTest {
 			"--problem", "DTLZ2_2",
 			"--input", input.getPath(),
 			"--output", output.getPath(),
-			"+ge", "+hyp", "+inv", "+err", "+spa", "+eps" });
+			"+ge", "+hyp", "+inv", "+err", "+spa","+spr", "+eps" });
 		
 		BufferedReader reader = null;
 		ResultFileReader resultReader = null;
@@ -135,7 +135,7 @@ public class ExtractDataTest {
 			try {
 				resultReader = new ResultFileReader(problem, input);
 				
-				Assert.assertEquals("#+ge +hyp +inv +err +spa +eps", 
+				Assert.assertEquals("#+ge +hyp +inv +err +spa +spr +eps",
 						reader.readLine());
 				
 				NondominatedPopulation population = 
@@ -146,6 +146,7 @@ public class ExtractDataTest {
 						indicator.getInvertedGenerationalDistance() + " " +
 						indicator.getMaximumParetoFrontError() + " " + 
 						indicator.getSpacing() + " " + 
+						indicator.getGeneralizedSpread() + " " +
 						indicator.getAdditiveEpsilonIndicator(), 
 						reader.readLine());
 				
@@ -156,6 +157,7 @@ public class ExtractDataTest {
 						indicator.getInvertedGenerationalDistance() + " " +
 						indicator.getMaximumParetoFrontError() + " " + 
 						indicator.getSpacing() + " " + 
+						indicator.getGeneralizedSpread() + " " +
 						indicator.getAdditiveEpsilonIndicator(), 
 						reader.readLine());
 				

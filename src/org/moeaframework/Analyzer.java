@@ -50,6 +50,7 @@ import org.moeaframework.core.indicator.R1Indicator;
 import org.moeaframework.core.indicator.R2Indicator;
 import org.moeaframework.core.indicator.R3Indicator;
 import org.moeaframework.core.indicator.Spacing;
+import org.moeaframework.core.indicator.GeneralizedSpread;
 import org.moeaframework.core.spi.ProblemFactory;
 import org.moeaframework.util.io.FileUtils;
 import org.moeaframework.util.statistics.KruskalWallisTest;
@@ -118,6 +119,12 @@ public class Analyzer extends ProblemBuilder {
 	 */
 	private boolean includeSpacing;
 	
+	/**
+	 * {@code true} if the generalized spread  metric is to be computed; {@code false}
+	 * otherwise.
+	 */
+	private boolean includeGeneralizedSpread;
+
 	/**
 	 * {@code true} if the maximum Pareto front error metric is to be 
 	 * computed; {@code false} otherwise.
@@ -306,6 +313,17 @@ public class Analyzer extends ProblemBuilder {
 	}
 	
 	/**
+	 * Enables the evaluation of the generalized spread metric.
+	 *
+	 * @return a reference to this analyzer
+	 */
+	public Analyzer includeGeneralizedSpread() {
+		includeGeneralizedSpread = true;
+
+		return this;
+	}
+
+	/**
 	 * Enables the evaluation of the contribution metric.
 	 * 
 	 * @return a reference to this analyzer
@@ -361,6 +379,7 @@ public class Analyzer extends ProblemBuilder {
 		includeAdditiveEpsilonIndicator();
 		includeMaximumParetoFrontError();
 		includeSpacing();
+		includeGeneralizedSpread();
 		includeContribution();
 		includeR1();
 		includeR2();
@@ -746,6 +765,10 @@ public class Analyzer extends ProblemBuilder {
 				indicators.add(new Spacing(problem));
 			}
 			
+			if (includeGeneralizedSpread) {
+				indicators.add(new GeneralizedSpread(problem,referenceSet));
+			}
+
 			if (includeContribution) {
 				if (epsilon == null) {
 					indicators.add(new Contribution(referenceSet));

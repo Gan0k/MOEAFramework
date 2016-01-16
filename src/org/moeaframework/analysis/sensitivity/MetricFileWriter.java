@@ -46,7 +46,7 @@ public class MetricFileWriter implements OutputWriter {
 	/**
 	 * The number of metrics supported by {@code MetricFileWriter}.
 	 */
-	public static final int NUMBER_OF_METRICS = 6;
+	public static final int NUMBER_OF_METRICS = 7;
 
 	/**
 	 * The stream for appending data to the file.
@@ -106,7 +106,7 @@ public class MetricFileWriter implements OutputWriter {
 		writer = new PrintWriter(new BufferedWriter(new FileWriter(file)), 
 				true);
 		
-		writer.println("#Hypervolume GenerationalDistance InvertedGenerationalDistance Spacing EpsilonIndicator MaximumParetoFrontError");
+		writer.println("#Hypervolume GenerationalDistance InvertedGenerationalDistance Spacing GeneralizedSpread EpsilonIndicator MaximumParetoFrontError");
 
 		// if the file already existed, copy all complete entries
 		if (existingFile.exists()) {
@@ -159,6 +159,8 @@ public class MetricFileWriter implements OutputWriter {
 		writer.print(qualityIndicator.getInvertedGenerationalDistance());
 		writer.print(' ');
 		writer.print(qualityIndicator.getSpacing());
+		writer.print(' ');
+		writer.print(qualityIndicator.getGeneralizedSpread());
 		writer.print(' ');
 		writer.print(qualityIndicator.getAdditiveEpsilonIndicator());
 		writer.print(' ');
