@@ -69,6 +69,35 @@ public class GeneralizedSpread extends NormalizedIndicator {
 
 		int numberOfObjectives = approximationSet.get(0).getNumberOfObjectives();
 
+		double spread = 1.0;
+		if (numberOfObjectives == 2) {
+			approximationSet.sort(new LexicographicalComparator());
+			referenceSet.sort(new LexicographicalComparator());
+
+			double df = IndicatorUtils.euclideanDistance(problem,approximationSet.get(0),
+				   referenceSet.get(0));
+			System.out.println("df: " + String.valueOf(df));
+			double dl = IndicatorUtils.euclideanDistance(problem,approximationSet.get(approximationSet.size()-1),
+				   referenceSet.get(referenceSet.size()-1));
+			System.out.println("dl: " + String.valueOf(dl));
+
+			double[] dist = new double[approximationSet.size()-1];
+			for (int i = 0; i < approximationSet.size()-1; i++) {
+				dist[i] = IndicatorUtils.euclideanDistance(problem,approximationSet.get(i),
+						approximationSet.get(i+1));
+			}
+			double mean = StatUtils.mean(dist);
+
+			if (approximationSet.size() > 1) {
+				double sum = 0.0;
+				for (double d: dist) {
+					sum += Math.abs(d-mean);
+				}
+				spread = (df + dl + sum) / (df + dl + (approximationSet.size()-1)*mean);
+			}
+			else spread = 1.0;
+		}
+
 		Solution[] extremeValues = new Solution[numberOfObjectives];
 		for (int i = 0; i < numberOfObjectives; i++) {
 			referenceSet.sort(new ObjectiveComparator(i));
@@ -95,8 +124,10 @@ public class GeneralizedSpread extends NormalizedIndicator {
 
 			double distExtremes = 0.0;
 			for (int i = 0 ; i < extremeValues.length; i++) {
-				distExtremes += IndicatorUtils.distanceToNearestSolution(problem,
+				double aux = IndicatorUtils.distanceToNearestSolution(problem,
 						extremeValues[i], approximationSet);
+				distExtremes += aux;
+ 				System.out.println("Value " + String.valueOf(i) + ": " + String.valueOf(aux));
 			}
 
 			double normalizedSum = 0.0;
@@ -104,8 +135,12 @@ public class GeneralizedSpread extends NormalizedIndicator {
 				normalizedSum += Math.abs(distances[i] - meanDistance);
 			}
 
-			return (distExtremes + normalizedSum) /
+			double gs = (distExtremes + normalizedSum) /
 				(distExtremes + (approximationSet.size()*meanDistance));
+			System.out.println("Generalized: " + String.valueOf(gs));
+			System.out.println("Spread: " + String.valueOf(spread));
+			System.out.println();
+			return gs;
 		}
 	}
 }
